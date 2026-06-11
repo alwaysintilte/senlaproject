@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+    id: create-appointment-service
+    author: alwaysintilte
+    changes:
+      - createTable:
+        tableName: appointment_service
+        columns:
+          - column:
+            name: appointment_id
+            type: BIGINT
+            constraints:
+              nullable: false
+              primaryKey: true
+              foreignKeyName: fk_as_appointment
+              references: appointment(id)
+              onDelete: CASCADE
+          - column:
+            name: service_id
+            type: BIGINT
+            constraints:
+              nullable: false
+              primaryKey: true
+              foreignKeyName: fk_as_service
+              references: service(id)

@@ -1,0 +1,38 @@
+databaseChangeLog:
+  - changeSet:
+    id: create-schedule
+    author: alwaysintilte
+    changes:
+      - createTable:
+        tableName: schedule
+        columns:
+          - column:
+            name: id
+            type: bigint
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              nullable: false
+          - column:
+            name: barber_id
+            type: bigint
+            constraints:
+              nullable: false
+              foreignKeyName: fk_schedule_barber
+              references: barber(id)
+              onDelete: CASCADE
+          - column:
+            name: work_date
+            type: date
+            constraints:
+              nullable: false
+          - column:
+            name: start_time
+            type: time
+            constraints:
+              nullable: false
+          - column:
+            name: end_time
+            type: time
+            constraints:
+              nullable: false

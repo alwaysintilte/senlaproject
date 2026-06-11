@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - include:
+    file: db/changelog/create-client-table.yaml
+  - include:
+    file: db/changelog/create-barber-table.yaml
+  - include:
+    file: db/changelog/create-service-table.yaml
+  - include:
+    file: db/changelog/create-appointment-table.yaml
+  - include:
+    file: db/changelog/create-appointment-service-table.yaml
+  - include:
+    file: db/changelog/create-review-table.yaml
+  - include:
+    file: db/changelog/create-schedule-table.yaml
+  - include:
+    file: db/changelog/triggers/trigger-check-review-status.yaml
+  - include:
+    file: db/changelog/triggers/trigger-prevent-double-booking.yaml

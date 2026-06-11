@@ -1,0 +1,45 @@
+databaseChangeLog:
+  - changeSet:
+    id: create-appointment
+    author: alwaysintilte
+    changes:
+      - createTable:
+        tableName: appointment
+        columns:
+          - column:
+            name: id
+            type: bigint
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              nullable: false
+          - column:
+            name: client_id
+            type: bigint
+            constraints:
+              foreignKeyName: fk_appointment_client
+              references: client(id)
+              onDelete: SET NULL
+          - column:
+            name: barber_id
+            type: bigint
+            constraints:
+              foreignKeyName: fk_appointment_barber
+              references: barber(id)
+              onDelete: SET NULL
+          - column:
+            name: appointment_date
+            type: timestamp
+            constraints:
+              nullable: false
+          - column:
+            name: status
+            type: varchar(20)
+            defaultValue: "pending"
+          - column:
+            name: notes
+            type: text
+          - column:
+            name: when_created
+            type: timestamp
+            defaultValueComputed: CURRENT_TIMESTAMP

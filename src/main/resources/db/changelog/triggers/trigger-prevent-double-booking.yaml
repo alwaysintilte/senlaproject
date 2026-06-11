@@ -1,0 +1,31 @@
+databaseChangeLog:
+  - changeSet:
+    id: trigger-prevent-double-booking
+    author: alwaysintilte
+    changes:
+      - sql:
+          dbms: postgresql
+          splitStatements: false
+          sql: |
+            CREATE OR REPLACE FUNCTION check_barber_availability()
+                RETURNS TRIGGER
+                LANGUAGE plpgsql
+            AS 
+            $$
+            BEGIN
+                IF EXISTS (
+                    SELECT 1 FROM appointment 
+                    WHERE barber_id = NEW.barber_id 
+                      AND appointment_date = NEW.appointment_date
+                      AND status != 'cancelled'
+                ) THEN
+                    RAISE EXCEPTION 'Этот барбер уже занят на выбранное время';
+                END IF;
+                RETURN NEW;
+            END;
+            $$
+
+            CREATE TRIGGER trigger_prevent_double_booking
+            BEFORE INSERT ON appointment
+            FOR EACH ROW
+            EXECUTE FUNCTION check_barber_availability();
