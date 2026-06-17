@@ -1,28 +1,42 @@
 package com.senla.project.models;
 
+import com.senla.project.models.enums.ServiceCategory;
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "service")
+@EntityListeners(AuditingEntityListener.class)
+@Table(name = "services")
 public class Service {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String name;
 
-    @Column()
     private String description;
 
-    @Column()
     private Integer duration;
 
     @Column(nullable = false)
     private Double price;
 
-    @Column()
-    private String category;
+    @Enumerated(EnumType.STRING)
+    @Column(length = 100)
+    private ServiceCategory category;
+
+    @CreatedDate
+    @Column(name = "created_at", updatable = false, nullable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
 
     public Service() {}
 
@@ -66,11 +80,27 @@ public class Service {
         this.price = price;
     }
 
-    public String getCategory() {
+    public ServiceCategory getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(ServiceCategory category) {
         this.category = category;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

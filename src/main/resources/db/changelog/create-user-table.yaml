@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-    id: create-service
+    id: create-user
     author: alwaysintilte
     changes:
       - createTable:
-        tableName: services
+        tableName: users
         columns:
           - column:
             name: id
@@ -14,24 +14,39 @@ databaseChangeLog:
               primaryKey: true
               nullable: false
           - column:
-            name: name
+            name: first_name
             type: varchar(100)
             constraints:
               nullable: false
           - column:
-            name: description
-            type: text
-          - column:
-            name: duration
-            type: int
-          - column:
-            name: price
-            type: decimal(6, 2)
+            name: last_name
+            type: varchar(100)
             constraints:
               nullable: false
           - column:
-            name: category
+            name: phone
+            type: varchar(20)
+            constraints:
+              unique: true
+              nullable: false
+          - column:
+            name: email
             type: varchar(100)
+            constraints:
+              unique: true
+          - column:
+            name: password
+            type: varchar(256)
+            constraints:
+              nullable: false
+          - column:
+            name: role_id
+            type: bigint
+            constraints:
+              nullable: false
+              foreignKeyName: fk_user_role
+              references: roles(id)
+              onDelete: RESTRICT
           - column:
             name: created_at
             type: timestamp

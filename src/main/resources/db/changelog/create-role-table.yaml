@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-    id: create-service
+    id: create-role
     author: alwaysintilte
     changes:
       - createTable:
-        tableName: services
+        tableName: roles
         columns:
           - column:
             name: id
@@ -15,23 +15,10 @@ databaseChangeLog:
               nullable: false
           - column:
             name: name
-            type: varchar(100)
+            type: varchar(30)
             constraints:
               nullable: false
-          - column:
-            name: description
-            type: text
-          - column:
-            name: duration
-            type: int
-          - column:
-            name: price
-            type: decimal(6, 2)
-            constraints:
-              nullable: false
-          - column:
-            name: category
-            type: varchar(100)
+              unique: true
           - column:
             name: created_at
             type: timestamp

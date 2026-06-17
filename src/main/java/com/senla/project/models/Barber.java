@@ -2,84 +2,33 @@ package com.senla.project.models;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "barber")
-public class Barber {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "first_name", nullable = false)
-    private String firstName;
-
-    @Column(name = "last_name", nullable = false)
-    private String lastName;
-
-    @Column(nullable = false, unique = true)
-    private String phone;
-
-    @Column(unique = true)
-    private String email;
-
+@Table(name = "barbers")
+@PrimaryKeyJoinColumn(name = "id")
+public class Barber extends User {
     @Column(nullable = false)
-    private String password;
+    private Double rating;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String specialty;
 
     @OneToMany(mappedBy = "barber")
-    private List<Schedule> schedules;
+    private List<Schedule> schedules = new ArrayList<>();
+
+    @OneToMany(mappedBy = "barber")
+    private List<Appointment> appointments = new ArrayList<>();
 
     public Barber() {}
 
-    public Long getId() {
-        return id;
+    public Double getRating() {
+        return rating;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void setRating(Double rating) {
+        this.rating = rating;
     }
 
     public String getSpecialty() {
@@ -90,11 +39,11 @@ public class Barber {
         this.specialty = specialty;
     }
 
-    public List<Schedule> getSchedules() {
-        return schedules;
+    public List<Appointment> getAppointments() {
+        return appointments;
     }
 
-    public void setSchedules(List<Schedule> schedules) {
-        this.schedules = schedules;
+    public void setAppointments(List<Appointment> appointments) {
+        this.appointments = appointments;
     }
 }

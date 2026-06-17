@@ -4,7 +4,7 @@ databaseChangeLog:
     author: alwaysintilte
     changes:
       - createTable:
-        tableName: schedule
+        tableName: schedules
         columns:
           - column:
             name: id
@@ -19,7 +19,7 @@ databaseChangeLog:
             constraints:
               nullable: false
               foreignKeyName: fk_schedule_barber
-              references: barber(id)
+              references: barbers(id)
               onDelete: CASCADE
           - column:
             name: work_date
@@ -34,5 +34,17 @@ databaseChangeLog:
           - column:
             name: end_time
             type: time
+            constraints:
+              nullable: false
+          - column:
+            name: created_at
+            type: timestamp
+            defaultValueComputed: CURRENT_TIMESTAMP
+            constraints:
+              nullable: false
+          - column:
+            name: updated_at
+            type: timestamp
+            defaultValueComputed: CURRENT_TIMESTAMP
             constraints:
               nullable: false

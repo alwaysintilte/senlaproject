@@ -1,34 +1,23 @@
 package com.senla.project.models;
 
 import jakarta.persistence.*;
+import jakarta.persistence.EntityListeners;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "schedules")
-public class Schedule {
+@Table(name = "roles")
+public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "barber_id", nullable = false)
-    private Barber barber;
-
-    @Column(name = "work_date", nullable = false)
-    private LocalDate workDate;
-
-    @Column(name = "start_time", nullable = false)
-    private LocalTime startTime;
-
-    @Column(name = "end_time", nullable = false)
-    private LocalTime endTime;
+    @Column(nullable = false, unique = true, length = 30)
+    private String name;
 
     @CreatedDate
     @Column(name = "created_at", updatable = false, nullable = false)
@@ -38,7 +27,7 @@ public class Schedule {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    public Schedule() {}
+    public Role() {}
 
     public Long getId() {
         return id;
@@ -48,36 +37,12 @@ public class Schedule {
         this.id = id;
     }
 
-    public Barber getBarber() {
-        return barber;
+    public String getName() {
+        return name;
     }
 
-    public void setBarber(Barber barber) {
-        this.barber = barber;
-    }
-
-    public LocalDate getWorkDate() {
-        return workDate;
-    }
-
-    public void setWorkDate(LocalDate workDate) {
-        this.workDate = workDate;
-    }
-
-    public LocalTime getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(LocalTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public LocalTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(LocalTime endTime) {
-        this.endTime = endTime;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public LocalDateTime getCreatedAt() {

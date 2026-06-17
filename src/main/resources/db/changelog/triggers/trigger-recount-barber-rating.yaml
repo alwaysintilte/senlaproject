@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+    id: trigger-recount-barber-rating
+    author: alwaysintilte
+    changes:
+      - sql:
+          dbms: postgresql
+          splitStatements: false
+          sql: |
+            CREATE OR REPLACE FUNCTION recount_barber_rating()
+                RETURNS TRIGGER
+                LANGUAGE plpgsql
+            AS 
+            $$
+            BEGIN
+                IF TG_OP = 'DELETE' THEN
+                    UPDATE barbers
+                    SET rating = (SELECT COALESCE(AVG(rating), 0.0) FROM reviews WHERE barber_id = OLD.barber_id)
+                    WHERE id = OLD.barber_id
+                ELSE
+                    UPDATE barbers
+                    SET rating = (SELECT COALESCE(AVG(rating), 0.0) FROM reviews WHERE barber_id = NEW.barber_id)
+                    WHERE id = NEW.barber_id
+                END IF
+                RETURN NULL;
+            END;
+            $$
+
+            CREATE TRIGGER trigger_recount_barber_rating
+            AFTER INSERT OR UPDATE OR DELETE ON reviews
+            FOR EACH ROW
+            EXECUTE FUNCTION recount_barber_rating();

@@ -4,7 +4,7 @@ databaseChangeLog:
     author: alwaysintilte
     changes:
       - createTable:
-        tableName: review
+        tableName: reviews
         columns:
           - column:
             name: id
@@ -18,22 +18,8 @@ databaseChangeLog:
             type: bigint
             constraints:
               foreignKeyName: fk_review_appointment
-              references: appointment(id)
+              references: appointments(id)
               onDelete: CASCADE
-          - column:
-            name: client_id
-            type: bigint
-            constraints:
-              foreignKeyName: fk_review_client
-              references: client(id)
-              onDelete: SET NULL
-          - column:
-            name: barber_id
-            type: bigint
-            constraints:
-              foreignKeyName: fk_review_barber
-              references: barber(id)
-              onDelete: SET NULL
           - column:
             name: rating
             type: int
@@ -43,6 +29,30 @@ databaseChangeLog:
             name: comment
             type: text
           - column:
-            name: when_created
+            name: created_at
             type: timestamp
             defaultValueComputed: CURRENT_TIMESTAMP
+            constraints:
+              nullable: false
+          - column:
+            name: updated_at
+            type: timestamp
+            defaultValueComputed: CURRENT_TIMESTAMP
+            constraints:
+              nullable: false
+          - column:
+            name: created_by
+            type: bigint
+            constraints:
+              foreignKeyName: fk_review_creator
+              references: users(id)
+              nullable: false
+              onDelete: RESTRICT
+          - column:
+            name: updated_by
+            type: bigint
+            constraints:
+              foreignKeyName: fk_review_updater
+              references: users(id)
+              nullable: false
+              onDelete: RESTRICT

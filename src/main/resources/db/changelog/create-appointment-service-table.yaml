@@ -13,7 +13,7 @@ databaseChangeLog:
               nullable: false
               primaryKey: true
               foreignKeyName: fk_as_appointment
-              references: appointment(id)
+              references: appointments(id)
               onDelete: CASCADE
           - column:
             name: service_id
@@ -22,4 +22,5 @@ databaseChangeLog:
               nullable: false
               primaryKey: true
               foreignKeyName: fk_as_service
-              references: service(id)
+              references: services(id)
+              onDelete: SET NULL

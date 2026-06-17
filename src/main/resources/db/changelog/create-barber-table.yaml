@@ -4,39 +4,21 @@ databaseChangeLog:
     author: alwaysintilte
     changes:
       - createTable:
-        tableName: barber
+        tableName: barbers
         columns:
           - column:
             name: id
             type: bigint
-            autoIncrement: true
             constraints:
               primaryKey: true
               nullable: false
+              foreignKeyName: fk_barber_user
+              references: users(id)
+              onDelete: CASCADE
           - column:
-            name: first_name
-            type: varchar(100)
-            constraints:
-              nullable: false
-          - column:
-            name: last_name
-            type: varchar(100)
-            constraints:
-              nullable: false
-          - column:
-            name: phone
-            type: varchar(20)
-            constraints:
-              unique: true
-              nullable: false
-          - column:
-            name: email
-            type: varchar(100)
-            constraints:
-              unique: true
-          - column:
-            name: password
-            type: varchar(256)
+            name: rating
+            type: decimal(3, 2)
+            defaultValue: 0.00
             constraints:
               nullable: false
           - column:

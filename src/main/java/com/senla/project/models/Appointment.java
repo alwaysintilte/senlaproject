@@ -1,36 +1,55 @@
 package com.senla.project.models;
 
+import com.senla.project.models.enums.AppointmentStatus;
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "appointment")
+@EntityListeners(AuditingEntityListener.class)
+@Table(name = "appointments")
 public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "client_id", nullable = false)
+    @JoinColumn(name = "client_id")
     private Client client;
 
     @ManyToOne
-    @JoinColumn(name = "barber_id", nullable = false)
+    @JoinColumn(name = "barber_id")
     private Barber barber;
 
     @Column(name = "appointment_date", nullable = false)
     private LocalDateTime appointmentDate;
 
-    @Column()
-    private String status = "pending";
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20, nullable = false)
+    private AppointmentStatus status = AppointmentStatus.PENDING;
 
-    @Column()
     private String notes;
 
-    @Column(name = "when_created")
-    private LocalDateTime whenCreated = LocalDateTime.now();
+    @CreatedDate
+    @Column(name = "created_at", updatable = false, nullable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "created_by", updatable = false, nullable = false)
+    private User createdBy;
+
+    @ManyToOne
+    @JoinColumn(name = "updated_by", nullable = false)
+    private User updatedBy;
 
     @ManyToMany
     @JoinTable(
@@ -38,7 +57,10 @@ public class Appointment {
             joinColumns = @JoinColumn(name = "appointment_id"),
             inverseJoinColumns = @JoinColumn(name = "service_id")
     )
-    private List<Service> services;
+    private List<Service> services = new ArrayList<>();
+
+    @OneToOne(mappedBy = "appointment")
+    private Review review;
 
     public Appointment() {}
 
@@ -74,11 +96,11 @@ public class Appointment {
         this.appointmentDate = appointmentDate;
     }
 
-    public String getStatus() {
+    public AppointmentStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(AppointmentStatus status) {
         this.status = status;
     }
 
@@ -90,12 +112,20 @@ public class Appointment {
         this.notes = notes;
     }
 
-    public LocalDateTime getWhenCreated() {
-        return whenCreated;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setWhenCreated(LocalDateTime whenCreated) {
-        this.whenCreated = whenCreated;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public List<Service> getServices() {
@@ -104,5 +134,29 @@ public class Appointment {
 
     public void setServices(List<Service> services) {
         this.services = services;
+    }
+
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public User getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(User updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+    public Review getReview() {
+        return review;
+    }
+
+    public void setReview(Review review) {
+        this.review = review;
     }
 }
