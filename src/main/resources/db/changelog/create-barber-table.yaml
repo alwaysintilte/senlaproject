@@ -1,28 +1,28 @@
 databaseChangeLog:
   - changeSet:
-    id: create-barber
-    author: alwaysintilte
-    changes:
-      - createTable:
-        tableName: barbers
-        columns:
-          - column:
-            name: id
-            type: bigint
-            constraints:
-              primaryKey: true
-              nullable: false
-              foreignKeyName: fk_barber_user
-              references: users(id)
-              onDelete: CASCADE
-          - column:
-            name: rating
-            type: decimal(3, 2)
-            defaultValue: 0.00
-            constraints:
-              nullable: false
-          - column:
-            name: specialty
-            type: varchar(100)
-            constraints:
-              nullable: false
+      id: create-barber
+      author: alwaysintilte
+      changes:
+        - createTable:
+            tableName: barbers
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: fk_barber_user
+                    references: users(id)
+                    onDelete: CASCADE
+              - column:
+                  name: rating
+                  type: decimal(3, 2)
+                  defaultValueNumeric: 0.00
+                  constraints:
+                    nullable: false
+              - column:
+                  name: specialty
+                  type: varchar(100)
+                  constraints:
+                    nullable: false

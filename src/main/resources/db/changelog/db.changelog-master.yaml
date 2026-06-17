@@ -1,25 +1,25 @@
 databaseChangeLog:
   - include:
-    file: db/changelog/create-role-table.yaml
+      file: db/changelog/create-role-table.yaml
   - include:
-    file: db/changelog/create-user-table.yaml
+      file: db/changelog/create-user-table.yaml
   - include:
-    file: db/changelog/create-client-table.yaml
+      file: db/changelog/create-client-table.yaml
   - include:
-    file: db/changelog/create-barber-table.yaml
+      file: db/changelog/create-barber-table.yaml
   - include:
-    file: db/changelog/create-service-table.yaml
+      file: db/changelog/create-service-table.yaml
   - include:
-    file: db/changelog/create-appointment-table.yaml
+      file: db/changelog/create-appointment-table.yaml
   - include:
-    file: db/changelog/create-appointment-service-table.yaml
+      file: db/changelog/create-appointment-service-table.yaml
   - include:
-    file: db/changelog/create-review-table.yaml
+      file: db/changelog/create-review-table.yaml
   - include:
-    file: db/changelog/create-schedule-table.yaml
+      file: db/changelog/create-schedule-table.yaml
   - include:
-    file: db/changelog/triggers/trigger-review-check-status.yaml
+      file: db/changelog/triggers/trigger-review-check-status.yaml
   - include:
-    file: db/changelog/triggers/trigger-prevent-double-booking.yaml
+      file: db/changelog/triggers/trigger-prevent-double-booking.yaml
   - include:
-    file: db/changelog/triggers/trigger-recount-barber-rating.yaml
+      file: db/changelog/triggers/trigger-recount-barber-rating.yaml

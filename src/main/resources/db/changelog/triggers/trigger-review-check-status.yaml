@@ -1,26 +1,26 @@
 databaseChangeLog:
   - changeSet:
-    id: trigger-review-check-status
-    author: alwaysintilte
-    changes:
-      - sql:
-          dbms: postgresql
-          splitStatements: false
-          sql: |
-            CREATE OR REPLACE FUNCTION check_appointment_completed()
-                RETURNS TRIGGER
-                LANGUAGE plpgsql
-            AS 
-            $$
-            BEGIN
-                IF (SELECT status FROM appointments WHERE id = NEW.appointment_id) != 'COMPLETED' THEN
-                    RAISE EXCEPTION 'Нельзя оставить отзыв, пока статус визита не завершен';
-                END IF;
-                RETURN NEW;
-            END;
-            $$
-          
-            CREATE TRIGGER trigger_review_check_status
-            BEFORE INSERT ON reviews
-            FOR EACH ROW
-            EXECUTE FUNCTION check_appointment_completed();
+      id: trigger-review-check-status
+      author: alwaysintilte
+      changes:
+        - sql:
+            dbms: postgresql
+            splitStatements: false
+            sql: |
+              CREATE OR REPLACE FUNCTION check_appointment_completed()
+                  RETURNS TRIGGER
+                  LANGUAGE plpgsql
+              AS 
+              $$
+              BEGIN
+                  IF (SELECT status FROM appointments WHERE id = NEW.appointment_id) != 'COMPLETED' THEN
+                      RAISE EXCEPTION 'Нельзя оставить отзыв, пока статус визита не завершен';
+                  END IF;
+                  RETURN NEW;
+              END;
+              $$;
+              
+              CREATE TRIGGER trigger_review_check_status
+              BEFORE INSERT ON reviews
+              FOR EACH ROW
+              EXECUTE FUNCTION check_appointment_completed();
