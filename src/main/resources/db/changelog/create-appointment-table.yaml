@@ -1,0 +1,71 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-appointment
+      author: alwaysintilte
+      changes:
+        - createTable:
+            tableName: appointments
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: client_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_appointment_client
+                    references: clients(id)
+                    onDelete: SET NULL
+              - column:
+                  name: barber_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_appointment_barber
+                    references: barbers(id)
+                    onDelete: SET NULL
+              - column:
+                  name: appointment_date
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(20)
+                  defaultValue: "PENDING"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: notes
+                  type: text
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_appointment_creator
+                    references: users(id)
+                    nullable: false
+                    onDelete: RESTRICT
+              - column:
+                  name: updated_by
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_appointment_updater
+                    references: users(id)
+                    nullable: false
+                    onDelete: RESTRICT

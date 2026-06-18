@@ -1,0 +1,58 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-review
+      author: alwaysintilte
+      changes:
+        - createTable:
+            tableName: reviews
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: appointment_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_review_appointment
+                    references: appointments(id)
+                    onDelete: CASCADE
+              - column:
+                  name: rating
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: comment
+                  type: text
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_review_creator
+                    references: users(id)
+                    nullable: false
+                    onDelete: RESTRICT
+              - column:
+                  name: updated_by
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_review_updater
+                    references: users(id)
+                    nullable: false
+                    onDelete: RESTRICT
