@@ -1,8 +1,6 @@
 package com.senla.project.models.DTO.requests;
 
-public class UserUpdateRequest {
-    private Long id;
-
+public class ClientRequest {
     private String firstName;
 
     private String lastName;
@@ -13,15 +11,7 @@ public class UserUpdateRequest {
 
     private String password;
 
-    public UserUpdateRequest() {}
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public ClientRequest() {}
 
     public String getFirstName() {
         return firstName;

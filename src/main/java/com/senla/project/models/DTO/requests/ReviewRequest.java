@@ -1,13 +1,13 @@
 package com.senla.project.models.DTO.requests;
 
-public class ReviewCreateRequest {
+public class ReviewRequest {
     private Long appointmentId;
 
     private Integer rating;
 
     private String comment;
 
-    public ReviewCreateRequest(){}
+    public ReviewRequest(){}
 
     public Long getAppointmentId() {
         return appointmentId;

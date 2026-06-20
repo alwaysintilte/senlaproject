@@ -1,9 +1,9 @@
 package com.senla.project.models.DTO.requests;
 
-public class RoleCreateRequest {
+public class RoleRequest {
     private String name;
 
-    public RoleCreateRequest() {}
+    public RoleRequest() {}
 
     public String getName() {
         return name;

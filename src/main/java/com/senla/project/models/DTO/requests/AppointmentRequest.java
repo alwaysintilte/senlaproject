@@ -3,14 +3,16 @@ package com.senla.project.models.DTO.requests;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class AppointmentCreateRequest {
+public class AppointmentRequest {
     private Long barberId;
+
+    private String notes;
 
     private LocalDateTime appointmentDate;
 
     private List<Long> serviceIds;
 
-    public AppointmentCreateRequest() {}
+    public AppointmentRequest() {}
 
     public Long getBarberId() {
         return barberId;
@@ -18,6 +20,14 @@ public class AppointmentCreateRequest {
 
     public void setBarberId(Long barberId) {
         this.barberId = barberId;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
     public LocalDateTime getAppointmentDate() {

@@ -3,14 +3,14 @@ package com.senla.project.models.DTO.requests;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class ScheduleCreateRequest {
+public class ScheduleRequest {
     private LocalDate workDate;
 
     private LocalTime startTime;
 
     private LocalTime endTime;
 
-    public ScheduleCreateRequest() {}
+    public ScheduleRequest() {}
 
     public LocalDate getWorkDate() {
         return workDate;

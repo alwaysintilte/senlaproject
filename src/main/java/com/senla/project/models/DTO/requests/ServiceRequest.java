@@ -1,6 +1,6 @@
 package com.senla.project.models.DTO.requests;
 
-public class ServiceCreateRequest {
+public class ServiceRequest {
     private String name;
 
     private String description;
@@ -11,7 +11,7 @@ public class ServiceCreateRequest {
 
     private String category;
 
-    public ServiceCreateRequest() {}
+    public ServiceRequest() {}
 
     public String getName() {
         return name;

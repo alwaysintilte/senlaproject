@@ -1,6 +1,6 @@
 package com.senla.project.models.DTO.requests;
 
-public class UserRegistrationRequest {
+public class BarberRequest {
     private String firstName;
 
     private String lastName;
@@ -11,7 +11,9 @@ public class UserRegistrationRequest {
 
     private String password;
 
-    public UserRegistrationRequest() {}
+    private String specialty;
+
+    public BarberRequest() {}
 
     public String getFirstName() {
         return firstName;
@@ -51,5 +53,13 @@ public class UserRegistrationRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getSpecialty() {
+        return specialty;
+    }
+
+    public void setSpecialty(String specialty) {
+        this.specialty = specialty;
     }
 }

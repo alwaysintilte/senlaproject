@@ -11,7 +11,7 @@ public class ReviewResponse {
 
     private LocalDateTime createdAt;
 
-    private UserResponse userResponse;
+    private ClientResponse clientResponse;
 
     public ReviewResponse() {}
 
@@ -47,11 +47,11 @@ public class ReviewResponse {
         this.createdAt = createdAt;
     }
 
-    public UserResponse getUserResponse() {
-        return userResponse;
+    public ClientResponse getClientResponse() {
+        return clientResponse;
     }
 
-    public void setUserResponse(UserResponse userResponse) {
-        this.userResponse = userResponse;
+    public void setClientResponse(ClientResponse clientResponse) {
+        this.clientResponse = clientResponse;
     }
 }
