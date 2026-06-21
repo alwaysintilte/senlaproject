@@ -1,0 +1,29 @@
+databaseChangelog:
+  - changeSet:
+      id: create-indexes
+      author: alwaysintilte
+      changes:
+        - createIndex:
+            tableName: schedules
+            indexName: index_schedules_barber_id
+            columns:
+              - column:
+                  name: barber_id
+        - createIndex:
+            tableName: reviews
+            indexName: index_reviews_appointment_id
+            columns:
+              - column:
+                  name: appointment_id
+        - createIndex:
+            tableName: appointments
+            indexName: idx_appointments_client_id
+            columns:
+              - column:
+                  name: client_id
+        - createIndex:
+            tableName: appointments
+            indexName: idx_appointments_barber_id
+            columns:
+              - column:
+                  name: barber_id

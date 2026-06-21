@@ -23,3 +23,5 @@ databaseChangeLog:
       file: db/changelog/triggers/trigger-prevent-double-booking.yaml
   - include:
       file: db/changelog/triggers/trigger-recount-barber-rating.yaml
+  - include:
+      file: db/changelog/indexes/create-indexes.yaml
