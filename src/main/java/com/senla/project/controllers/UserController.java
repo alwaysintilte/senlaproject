@@ -2,6 +2,7 @@ package com.senla.project.controllers;
 
 import com.senla.project.models.DTO.requests.UserLoginRequest;
 import com.senla.project.models.DTO.requests.UserRequest;
+import com.senla.project.models.DTO.responses.JwtTokenResponse;
 import com.senla.project.models.DTO.responses.UserResponse;
 import com.senla.project.services.UserService;
 import org.springframework.data.domain.Page;
@@ -25,7 +26,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public UserResponse loginUser(@RequestBody UserLoginRequest request) {
+    public JwtTokenResponse loginUser(@RequestBody UserLoginRequest request) {
         return userService.loginUser(request);
     }
 

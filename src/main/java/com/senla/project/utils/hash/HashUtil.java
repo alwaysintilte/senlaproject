@@ -1,19 +1,21 @@
 package com.senla.project.utils.hash;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import java.security.MessageDigest;
 
 public class HashUtil {
+    private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
     public static String encode(String input) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(input.getBytes());
-            StringBuilder hex = new StringBuilder();
-            for (byte b : hash) {
-                hex.append(String.format("%02x", b));
-            }
-            return hex.toString();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        if(input == null) {
+            return null;
         }
+        return encoder.encode(input);
+    }
+    public static boolean matches(String rawPassword, String hashedPassword) {
+        if(rawPassword == null || hashedPassword == null) {
+            return false;
+        }
+        return encoder.matches(rawPassword, hashedPassword);
     }
 }

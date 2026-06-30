@@ -1,16 +1,22 @@
 package com.senla.project.services;
 
 import com.senla.project.models.DTO.requests.UserLoginRequest;
+import com.senla.project.models.DTO.responses.JwtTokenResponse;
 import com.senla.project.models.User;
 import com.senla.project.models.DTO.requests.UserRequest;
 import com.senla.project.models.DTO.responses.UserResponse;
 import com.senla.project.models.Role;
 import com.senla.project.repositories.UserRepository;
 import com.senla.project.repositories.RoleRepository;
+import com.senla.project.security.JwtService;
 import com.senla.project.utils.hash.HashUtil;
 import com.senla.project.utils.mapper.UserMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,11 +24,15 @@ public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final UserMapper userMapper;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, UserMapper userMapper) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, UserMapper userMapper, JwtService jwtService, AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.userMapper = userMapper;
+        this.jwtService = jwtService;
+        this.authenticationManager = authenticationManager;
     }
 
     public UserResponse createUser(UserRequest request) {
@@ -45,22 +55,21 @@ public class UserService {
         Page<User> usersPage = userRepository.findByRoleName(roleName, pageable);
         return usersPage.map(user -> userMapper.toDto(user));
     }
-    public UserResponse loginUser(UserLoginRequest request) {
-        User user;
+    public JwtTokenResponse loginUser(UserLoginRequest request) {
+        String identifier;
         if (request.getEmail() != null) {
-            user = userRepository.findByEmail(request.getEmail())
-                    .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
+            identifier = request.getEmail();
         } else if (request.getPhone() != null) {
-            user = userRepository.findByPhone(request.getPhone())
-                    .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
+            identifier = request.getPhone();
         } else {
             throw new RuntimeException("Необходимо указать email или телефон");
         }
-        String hashedRequestPassword = HashUtil.encode(request.getPassword());
-        if (!user.getPassword().equals(hashedRequestPassword)) {
-            throw new RuntimeException("Неверный пароль");
-        }
-        return userMapper.toDto(user);
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(identifier, request.getPassword()));
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String jwt = jwtService.generateToken(userDetails);
+        JwtTokenResponse jwtTokenResponse = new JwtTokenResponse();
+        jwtTokenResponse.setToken(jwt);
+        return jwtTokenResponse;
     }
     public Page<UserResponse> getAllUsers(Pageable pageable) {
         Page<User> usersPage = userRepository.findAll(pageable);
