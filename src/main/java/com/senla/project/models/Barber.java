@@ -39,6 +39,14 @@ public class Barber extends User {
         this.specialty = specialty;
     }
 
+    public List<Schedule> getSchedules() {
+        return schedules;
+    }
+
+    public void setSchedules(List<Schedule> schedules) {
+        this.schedules = schedules;
+    }
+
     public List<Appointment> getAppointments() {
         return appointments;
     }

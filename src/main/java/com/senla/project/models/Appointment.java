@@ -31,7 +31,7 @@ public class Appointment {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20, nullable = false)
-    private AppointmentStatus status = AppointmentStatus.PENDING;
+    private AppointmentStatus status;
 
     private String notes;
 

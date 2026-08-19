@@ -60,7 +60,7 @@ databaseChangeLog:
                     foreignKeyName: fk_appointment_creator
                     references: users(id)
                     nullable: false
-                    onDelete: RESTRICT
+                    onDelete: SET NULL
               - column:
                   name: updated_by
                   type: bigint
@@ -68,4 +68,4 @@ databaseChangeLog:
                     foreignKeyName: fk_appointment_updater
                     references: users(id)
                     nullable: false
-                    onDelete: RESTRICT
+                    onDelete: SET NULL
