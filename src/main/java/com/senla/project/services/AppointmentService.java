@@ -1,12 +1,16 @@
 package com.senla.project.services;
 
+import com.senla.project.kafka.NotificationProducer;
 import com.senla.project.models.*;
 import com.senla.project.models.DTO.requests.AppointmentRequest;
+import com.senla.project.models.DTO.requests.notifications.NotificationRequest;
 import com.senla.project.models.DTO.responses.AppointmentResponse;
 import com.senla.project.models.enums.AppointmentStatus;
 import com.senla.project.models.enums.ServiceCategory;
 import com.senla.project.repositories.*;
 import com.senla.project.utils.mapper.AppointmentMapper;
+import com.senla.project.utils.mapper.NotificationMapper;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -20,15 +24,20 @@ public class AppointmentService {
     private final BarberRepository barberRepository;
     private final ServiceRepository serviceRepository;
     private final AppointmentMapper appointmentMapper;
+    private final NotificationProducer notificationProducer;
+    private final NotificationMapper notificationMapper;
 
-    public AppointmentService(AppointmentRepository appointmentRepository, ClientRepository clientRepository, BarberRepository barberRepository, ServiceRepository serviceRepository, AppointmentMapper appointmentMapper) {
+    public AppointmentService(AppointmentRepository appointmentRepository, ClientRepository clientRepository, BarberRepository barberRepository, ServiceRepository serviceRepository, AppointmentMapper appointmentMapper, NotificationProducer notificationProducer, NotificationMapper notificationMapper) {
         this.appointmentRepository = appointmentRepository;
         this.clientRepository = clientRepository;
         this.barberRepository = barberRepository;
         this.serviceRepository = serviceRepository;
         this.appointmentMapper = appointmentMapper;
+        this.notificationProducer = notificationProducer;
+        this.notificationMapper = notificationMapper;
     }
 
+    @Transactional
     public AppointmentResponse createAppointment(Long clientId, AppointmentRequest request) {
         Client client = clientRepository.findById(clientId)
                 .orElseThrow(() -> new RuntimeException("Клиент не найден"));
@@ -46,6 +55,8 @@ public class AppointmentService {
         appointment.setCreatedBy(client);
         appointment.setUpdatedBy(client);
         Appointment savedAppointment = appointmentRepository.save(appointment);
+        NotificationRequest notificationRequest = notificationMapper.mapToNotificationRequest(appointment, client, barber, "Barbershop Appointment");
+        notificationProducer.sendNotificationRequest(notificationRequest);
         return appointmentMapper.toDto(savedAppointment);
     }
     public AppointmentResponse getAppointmentById(Long id) {
