@@ -6,6 +6,8 @@ import com.senla.project.services.ClientService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,32 +21,33 @@ public class ClientController {
     }
 
     @PostMapping
-    public ClientResponse createClient(@RequestBody ClientRequest request) {
-        return clientService.createClient(request);
+    public ResponseEntity createClient(@RequestBody ClientRequest request) {
+        return new ResponseEntity<>(clientService.createClient(request), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ClientResponse getClientById(@PathVariable Long id) {
-        return clientService.getClientById(id);
+    public ResponseEntity getClientById(@PathVariable Long id) {
+        return new ResponseEntity<>(clientService.getClientById(id), HttpStatus.OK);
     }
 
     @GetMapping
-    public Page<ClientResponse> getAllClients(@PageableDefault(size = 10) Pageable pageable) {
-        return clientService.getAllClients(pageable);
+    public ResponseEntity getAllClients(@PageableDefault(size = 10) Pageable pageable) {
+        return new ResponseEntity<>(clientService.getAllClients(pageable), HttpStatus.OK);
     }
 
     @GetMapping("/barber/{barberId}")
-    public Page<ClientResponse> getClientsByBarberId(@PathVariable Long barberId, @PageableDefault(size = 10) Pageable pageable) {
-        return clientService.getClientsDistinctByAppointmentsBarberId(barberId, pageable);
+    public ResponseEntity getClientsByBarberId(@PathVariable Long barberId, @PageableDefault(size = 10) Pageable pageable) {
+        return new ResponseEntity<>(clientService.getClientsDistinctByAppointmentsBarberId(barberId, pageable), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ClientResponse updateClient(@PathVariable Long id, @RequestBody ClientRequest request) {
-        return clientService.updateClient(id, request);
+    public ResponseEntity updateClient(@PathVariable Long id, @RequestBody ClientRequest request) {
+        return new ResponseEntity<>(clientService.updateClient(id, request), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteClient(@PathVariable Long id) {
+    public ResponseEntity deleteClient(@PathVariable Long id) {
         clientService.deleteClient(id);
+        return new ResponseEntity<>(id, HttpStatus.OK);
     }
 }
