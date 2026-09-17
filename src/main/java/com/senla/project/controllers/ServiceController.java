@@ -6,6 +6,8 @@ import com.senla.project.services.ServiceService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,32 +21,33 @@ public class ServiceController {
     }
 
     @PostMapping
-    public ServiceResponse createService(@RequestBody ServiceRequest request) {
-        return serviceService.createService(request);
+    public ResponseEntity createService(@RequestBody ServiceRequest request) {
+        return new ResponseEntity<>(serviceService.createService(request), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ServiceResponse getServiceById(@PathVariable Long id) {
-        return serviceService.getServiceById(id);
+    public ResponseEntity getServiceById(@PathVariable Long id) {
+        return new ResponseEntity<>(serviceService.getServiceById(id), HttpStatus.OK);
     }
 
     @GetMapping
-    public Page<ServiceResponse> getAllServices(@PageableDefault(size = 10) Pageable pageable) {
-        return serviceService.getAllServices(pageable);
+    public ResponseEntity getAllServices(@PageableDefault(size = 10) Pageable pageable) {
+        return new ResponseEntity<>(serviceService.getAllServices(pageable), HttpStatus.OK);
     }
 
     @GetMapping("/category/{category}")
-    public Page<ServiceResponse> getServicesByCategory(@PathVariable String category, @PageableDefault(size = 10) Pageable pageable) {
-        return serviceService.getServicesByCategory(category, pageable);
+    public ResponseEntity getServicesByCategory(@PathVariable String category, @PageableDefault(size = 10) Pageable pageable) {
+        return new ResponseEntity<>(serviceService.getServicesByCategory(category, pageable), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ServiceResponse updateService(@PathVariable Long id, @RequestBody ServiceRequest request) {
-        return serviceService.updateService(id, request);
+    public ResponseEntity updateService(@PathVariable Long id, @RequestBody ServiceRequest request) {
+        return new ResponseEntity<>(serviceService.updateService(id, request), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteService(@PathVariable Long id) {
+    public ResponseEntity deleteService(@PathVariable Long id) {
         serviceService.deleteService(id);
+        return new ResponseEntity<>(id, HttpStatus.OK);
     }
 }

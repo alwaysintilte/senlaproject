@@ -7,6 +7,8 @@ import com.senla.project.services.AppointmentService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,39 +22,40 @@ public class AppointmentController {
     }
 
     @PostMapping
-    public AppointmentResponse createAppointment(
+    public ResponseEntity createAppointment(
             @RequestParam Long clientId,
             @RequestBody AppointmentRequest request) {
-        return appointmentService.createAppointment(clientId, request);
+        return new ResponseEntity<>(appointmentService.createAppointment(clientId, request), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public AppointmentResponse getAppointmentById(@PathVariable Long id) {
-        return appointmentService.getAppointmentById(id);
+    public ResponseEntity getAppointmentById(@PathVariable Long id) {
+        return new ResponseEntity<>(appointmentService.getAppointmentById(id), HttpStatus.OK);
     }
 
     @GetMapping("/client/{clientId}")
-    public Page<AppointmentResponse> getAppointmentsByClientId(@PathVariable Long clientId, @PageableDefault(size = 10) Pageable pageable) {
-        return appointmentService.getAppointmentsByClientId(clientId, pageable);
+    public ResponseEntity getAppointmentsByClientId(@PathVariable Long clientId, @PageableDefault(size = 10) Pageable pageable) {
+        return new ResponseEntity<>(appointmentService.getAppointmentsByClientId(clientId, pageable), HttpStatus.OK);
     }
 
     @GetMapping("/barber/{barberId}")
-    public Page<AppointmentResponse> getAppointmentsByBarberId(@PathVariable Long barberId, @PageableDefault(size = 10) Pageable pageable) {
-        return appointmentService.getAppointmentsByBarberId(barberId, pageable);
+    public ResponseEntity getAppointmentsByBarberId(@PathVariable Long barberId, @PageableDefault(size = 10) Pageable pageable) {
+        return new ResponseEntity<>(appointmentService.getAppointmentsByBarberId(barberId, pageable), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public AppointmentResponse updateAppointment(@PathVariable Long id, @RequestBody AppointmentRequest request) {
-        return appointmentService.updateAppointment(id, request);
+    public ResponseEntity updateAppointment(@PathVariable Long id, @RequestBody AppointmentRequest request) {
+        return new ResponseEntity<>(appointmentService.updateAppointment(id, request), HttpStatus.OK);
     }
 
     @PutMapping("/{id}/status")
-    public AppointmentResponse updateAppointmentStatus(@PathVariable Long id, @RequestParam String status) {
-        return appointmentService.updateAppointmentStatus(id, status);
+    public ResponseEntity updateAppointmentStatus(@PathVariable Long id, @RequestParam String status) {
+        return new ResponseEntity<>(appointmentService.updateAppointmentStatus(id, status), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteAppointment(@PathVariable Long id) {
+    public ResponseEntity deleteAppointment(@PathVariable Long id) {
         appointmentService.deleteAppointment(id);
+        return new ResponseEntity<>(id, HttpStatus.OK);
     }
 }

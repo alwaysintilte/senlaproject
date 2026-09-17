@@ -8,6 +8,8 @@ import com.senla.project.services.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,37 +23,38 @@ public class UserController {
     }
 
     @PostMapping
-    public UserResponse createUser(@RequestBody UserRequest request) {
-        return userService.createUser(request);
+    public ResponseEntity createUser(@RequestBody UserRequest request) {
+        return new ResponseEntity<>(userService.createUser(request), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public JwtTokenResponse loginUser(@RequestBody UserLoginRequest request) {
-        return userService.loginUser(request);
+    public ResponseEntity loginUser(@RequestBody UserLoginRequest request) {
+        return new ResponseEntity<>(userService.loginUser(request), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public UserResponse getUserById(@PathVariable Long id) {
-        return userService.getUserById(id);
+    public ResponseEntity getUserById(@PathVariable Long id) {
+        return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
 
     @GetMapping
-    public Page<UserResponse> getAllUsers(@PageableDefault(size = 10) Pageable pageable) {
-        return userService.getAllUsers(pageable);
+    public ResponseEntity getAllUsers(@PageableDefault(size = 10) Pageable pageable) {
+        return new ResponseEntity<>(userService.getAllUsers(pageable), HttpStatus.OK);
     }
 
     @GetMapping("/role/{roleName}")
-    public Page<UserResponse> getUsersByRoleName(@PathVariable String roleName, @PageableDefault(size = 10) Pageable pageable) {
-        return userService.getUsersByRoleName(roleName, pageable);
+    public ResponseEntity getUsersByRoleName(@PathVariable String roleName, @PageableDefault(size = 10) Pageable pageable) {
+        return new ResponseEntity<>(userService.getUsersByRoleName(roleName, pageable), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public UserResponse updateUser(@PathVariable Long id, @RequestBody UserRequest request) {
-        return userService.updateUser(id, request);
+    public ResponseEntity updateUser(@PathVariable Long id, @RequestBody UserRequest request) {
+        return new ResponseEntity<>(userService.updateUser(id, request), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
+    public ResponseEntity deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
+        return new ResponseEntity<>(id, HttpStatus.OK);
     }
 }

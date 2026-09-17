@@ -6,6 +6,8 @@ import com.senla.project.services.ReviewService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,32 +21,33 @@ public class ReviewController {
     }
 
     @PostMapping
-    public ReviewResponse createReview(@RequestBody ReviewRequest request) {
-        return reviewService.createReview(request);
+    public ResponseEntity createReview(@RequestBody ReviewRequest request) {
+        return new ResponseEntity<>(reviewService.createReview(request), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ReviewResponse getReviewById(@PathVariable Long id) {
-        return reviewService.getReviewById(id);
+    public ResponseEntity getReviewById(@PathVariable Long id) {
+        return new ResponseEntity<>(reviewService.getReviewById(id), HttpStatus.OK);
     }
 
     @GetMapping
-    public Page<ReviewResponse> getAllReviews(@PageableDefault(size = 10) Pageable pageable) {
-        return reviewService.getAllReviews(pageable);
+    public ResponseEntity getAllReviews(@PageableDefault(size = 10) Pageable pageable) {
+        return new ResponseEntity<>(reviewService.getAllReviews(pageable), HttpStatus.OK);
     }
 
     @GetMapping("/barber/{barberId}")
-    public Page<ReviewResponse> getReviewsByAppointmentBarberId(@PathVariable Long barberId, @PageableDefault(size = 10) Pageable pageable) {
-        return reviewService.getReviewsByAppointmentBarberId(barberId, pageable);
+    public ResponseEntity getReviewsByAppointmentBarberId(@PathVariable Long barberId, @PageableDefault(size = 10) Pageable pageable) {
+        return new ResponseEntity<>(reviewService.getReviewsByAppointmentBarberId(barberId, pageable), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ReviewResponse updateReview(@PathVariable Long id, @RequestBody ReviewRequest request) {
-        return reviewService.updateReview(id, request);
+    public ResponseEntity updateReview(@PathVariable Long id, @RequestBody ReviewRequest request) {
+        return new ResponseEntity<>(reviewService.updateReview(id, request), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteReview(@PathVariable Long id) {
+    public ResponseEntity deleteReview(@PathVariable Long id) {
         reviewService.deleteReview(id);
+        return new ResponseEntity<>(id, HttpStatus.OK);
     }
 }
