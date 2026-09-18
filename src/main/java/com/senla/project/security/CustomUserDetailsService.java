@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.util.List;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -24,6 +24,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByEmail(identifier)
                 .or(() -> userRepository.findByPhone(identifier))
                 .orElseThrow(() -> new UsernameNotFoundException("Не найден"));
-        return new org.springframework.security.core.userdetails.User(identifier, user.getPassword(), Collections.singletonList(new SimpleGrantedAuthority(user.getRole().getName())));
+        return new org.springframework.security.core.userdetails.User(identifier, user.getPassword(), List.of(new SimpleGrantedAuthority(user.getRole().getName())));
     }
 }

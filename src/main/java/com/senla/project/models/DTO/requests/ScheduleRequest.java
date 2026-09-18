@@ -1,13 +1,20 @@
 package com.senla.project.models.DTO.requests;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class ScheduleRequest {
+    @NotNull(message = "Work date cannot be null")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate workDate;
-
+    @NotNull(message = "Start time cannot be null")
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime startTime;
-
+    @NotNull(message = "End time cannot be null")
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime endTime;
 
     public ScheduleRequest() {}

@@ -1,5 +1,7 @@
 package com.senla.project.services;
 
+import com.senla.project.exceptions.AlreadyExistsException;
+import com.senla.project.exceptions.NotFoundException;
 import com.senla.project.models.DTO.requests.RoleRequest;
 import com.senla.project.models.DTO.responses.RoleResponse;
 import com.senla.project.models.Role;
@@ -8,6 +10,7 @@ import com.senla.project.utils.mapper.RoleMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,9 +24,10 @@ public class RoleService {
         this.roleMapper = roleMapper;
     }
 
+    @Transactional
     public RoleResponse createRole(RoleRequest request) {
         if (roleRepository.existsByName(request.getName())) {
-            throw new RuntimeException("Роль уже существует");
+            throw new AlreadyExistsException("Role");
         }
         Role role = roleMapper.toEntity(request);
         Role savedRole = roleRepository.save(role);
@@ -31,12 +35,12 @@ public class RoleService {
     }
     public RoleResponse getRoleById(Long id) {
         Role role = roleRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Роль с id " + id + " не найдена"));
+                .orElseThrow(() -> new NotFoundException("Role"));
         return roleMapper.toDto(role);
     }
     public RoleResponse getRoleByName(String name) {
         Role role = roleRepository.findByName(name)
-                .orElseThrow(() -> new RuntimeException("Роль с name " + name + " не найдена"));
+                .orElseThrow(() -> new NotFoundException("Role"));
         return roleMapper.toDto(role);
     }
     public List<RoleResponse> getAllRoles() {

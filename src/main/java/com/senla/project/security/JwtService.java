@@ -16,13 +16,14 @@ import java.util.Map;
 @Service
 public class JwtService {
     @Value("${token.signing.key}")
-    private String jwtSigninigKey;
+    private String jwtSigningKey;
 
     @Value("${jwt.expiration}")
     private long expirationTime;
 
-    public SecretKey getJwtSigninigKey(){
-        return Keys.hmacShaKeyFor(jwtSigninigKey.getBytes(StandardCharsets.UTF_8));    }
+    private SecretKey getJwtSigningKey(){
+        return Keys.hmacShaKeyFor(jwtSigningKey.getBytes(StandardCharsets.UTF_8));
+    }
 
     public String extractUserName(String token){
         return extractClaims(token).getSubject();
@@ -41,7 +42,7 @@ public class JwtService {
                 .subject(subject)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() +  expirationTime))
-                .signWith(getJwtSigninigKey())
+                .signWith(getJwtSigningKey())
                 .compact();
     }
 
@@ -49,13 +50,9 @@ public class JwtService {
         return extractClaims(token).getExpiration();
     }
 
-    public String extractRole(String token) {
-        return extractClaims(token).get("role", String.class);
-    }
-
     private Claims extractClaims(String token){
         return Jwts.parser()
-                .verifyWith(getJwtSigninigKey())
+                .verifyWith(getJwtSigningKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();

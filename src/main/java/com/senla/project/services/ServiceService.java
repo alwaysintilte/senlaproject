@@ -1,5 +1,7 @@
 package com.senla.project.services;
 
+import com.senla.project.exceptions.InvalidRequestDataException;
+import com.senla.project.exceptions.NotFoundException;
 import com.senla.project.models.Service;
 import com.senla.project.models.DTO.requests.ServiceRequest;
 import com.senla.project.models.DTO.responses.ServiceResponse;
@@ -8,7 +10,9 @@ import com.senla.project.repositories.ServiceRepository;
 import com.senla.project.utils.mapper.ServiceMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class ServiceService {
@@ -20,6 +24,7 @@ public class ServiceService {
         this.serviceMapper = serviceMapper;
     }
 
+    @Transactional
     public ServiceResponse createService(ServiceRequest request) {
         Service service = serviceMapper.toEntity(request);
         Service savedService = serviceRepository.save(service);
@@ -27,7 +32,7 @@ public class ServiceService {
     }
     public ServiceResponse getServiceById(Long id) {
         Service service = serviceRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Услуга с id " + id + " не найдена"));
+                .orElseThrow(() -> new NotFoundException("Services"));
         return serviceMapper.toDto(service);
     }
     public Page<ServiceResponse> getServicesByCategory(String category, Pageable pageable) {
@@ -35,7 +40,7 @@ public class ServiceService {
         try {
             categoryEnum = ServiceCategory.valueOf(category);
         } catch (IllegalArgumentException e) {
-            throw new RuntimeException("Такой категории не существует");
+            throw new InvalidRequestDataException("Invalid service category", HttpStatus.BAD_REQUEST);
         }
         Page<Service> servicesPage = serviceRepository.findByCategory(categoryEnum, pageable);
         return servicesPage.map(service -> serviceMapper.toDto(service));
@@ -44,16 +49,18 @@ public class ServiceService {
         Page<Service> servicesPage = serviceRepository.findAll(pageable);
         return servicesPage.map(service -> serviceMapper.toDto(service));
     }
+    @Transactional
     public ServiceResponse updateService(Long id, ServiceRequest request) {
         Service existingService = serviceRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Услуга с id " + id + " не найдена"));
+                .orElseThrow(() -> new NotFoundException("Services"));
         serviceMapper.updateEntity(request, existingService);
         Service updatedService = serviceRepository.save(existingService);
         return serviceMapper.toDto(updatedService);
     }
+    @Transactional
     public void deleteService(Long id) {
         if (!serviceRepository.existsById(id)) {
-            throw new RuntimeException("Услуга с id " + id + " не найдена");
+            throw new NotFoundException("Services");
         }
         serviceRepository.deleteById(id);
     }
