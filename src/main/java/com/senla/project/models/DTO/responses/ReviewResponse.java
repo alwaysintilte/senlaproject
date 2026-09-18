@@ -1,7 +1,10 @@
 package com.senla.project.models.DTO.responses;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.time.LocalDateTime;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ReviewResponse {
     private Long id;
 

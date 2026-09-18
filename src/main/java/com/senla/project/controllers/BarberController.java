@@ -3,6 +3,7 @@ package com.senla.project.controllers;
 import com.senla.project.models.DTO.requests.BarberRequest;
 import com.senla.project.models.DTO.responses.BarberResponse;
 import com.senla.project.services.BarberService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -21,33 +22,33 @@ public class BarberController {
     }
 
     @PostMapping
-    public ResponseEntity createBarber(@RequestBody BarberRequest request) {
+    public ResponseEntity<BarberResponse> createBarber(@Valid @RequestBody BarberRequest request) {
         return new ResponseEntity<>(barberService.createBarber(request), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getBarberById(@PathVariable Long id) {
+    public ResponseEntity<BarberResponse> getBarberById(@PathVariable Long id) {
         return new ResponseEntity<>(barberService.getBarberById(id), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity getAllBarbers(@PageableDefault(size = 10) Pageable pageable) {
+    public ResponseEntity<Page<BarberResponse>> getAllBarbers(@PageableDefault(size = 10) Pageable pageable) {
         return new ResponseEntity<>(barberService.getAllBarbers(pageable), HttpStatus.OK);
     }
 
     @GetMapping("/specialty")
-    public ResponseEntity getBarbersBySpecialty(@RequestParam String specialty, @PageableDefault(size = 10) Pageable pageable) {
+    public ResponseEntity<Page<BarberResponse>> getBarbersBySpecialty(@RequestParam String specialty, @PageableDefault(size = 10) Pageable pageable) {
         return new ResponseEntity<>(barberService.getBarbersBySpecialty(specialty, pageable), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateBarber(@PathVariable Long id, @RequestBody BarberRequest request) {
+    public ResponseEntity<BarberResponse> updateBarber(@PathVariable Long id, @Valid @RequestBody BarberRequest request) {
         return new ResponseEntity<>(barberService.updateBarber(id, request), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteBarber(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteBarber(@PathVariable Long id) {
         barberService.deleteBarber(id);
-        return new ResponseEntity<>(id, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
