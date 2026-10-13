@@ -1,7 +1,8 @@
 package com.senla.project.models.DTO.responses;
 
-import com.senla.project.models.Client;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ClientResponse {
     private Long id;
 

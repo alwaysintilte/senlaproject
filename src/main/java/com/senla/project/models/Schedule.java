@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Table(name = "schedules")
 public class Schedule {
     @Id
@@ -30,15 +29,23 @@ public class Schedule {
     @Column(name = "end_time", nullable = false)
     private LocalTime endTime;
 
-    @CreatedDate
     @Column(name = "created_at", updatable = false, nullable = false)
     private LocalDateTime createdAt;
 
-    @LastModifiedDate
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
     public Schedule() {}
+
+    @PrePersist
+    private void onCreate(){
+        this.createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    private void onUpdate(){
+        this.updatedAt = LocalDateTime.now();
+    }
 
     public Long getId() {
         return id;

@@ -1,14 +1,15 @@
 package com.senla.project.models;
 
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Table(name = "reviews")
 public class Review {
     @Id
@@ -24,11 +25,9 @@ public class Review {
 
     private String comment;
 
-    @CreatedDate
     @Column(name = "created_at", updatable = false, nullable = false)
     private LocalDateTime createdAt;
 
-    @LastModifiedDate
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
@@ -41,6 +40,16 @@ public class Review {
     private User updatedBy;
 
     public Review() {}
+
+    @PrePersist
+    private void onCreate(){
+        this.createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    private void onUpdate(){
+        this.updatedAt = LocalDateTime.now();
+    }
 
     public Long getId() {
         return id;

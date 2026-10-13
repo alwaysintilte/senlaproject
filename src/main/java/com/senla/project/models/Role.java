@@ -9,7 +9,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Table(name = "roles")
 public class Role {
     @Id
@@ -19,15 +18,23 @@ public class Role {
     @Column(nullable = false, unique = true, length = 30)
     private String name;
 
-    @CreatedDate
     @Column(name = "created_at", updatable = false, nullable = false)
     private LocalDateTime createdAt;
 
-    @LastModifiedDate
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
     public Role() {}
+
+    @PrePersist
+    private void onCreate(){
+        this.createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    private void onUpdate(){
+        this.updatedAt = LocalDateTime.now();
+    }
 
     public Long getId() {
         return id;

@@ -3,6 +3,8 @@ package com.senla.project.controllers;
 import com.senla.project.models.DTO.requests.ScheduleRequest;
 import com.senla.project.models.DTO.responses.ScheduleResponse;
 import com.senla.project.services.ScheduleService;
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,27 +24,25 @@ public class ScheduleController {
     }
 
     @PostMapping
-    public ResponseEntity createSchedule(
-            @RequestParam Long barberId,
-            @RequestBody ScheduleRequest request
+    public ResponseEntity<ScheduleResponse> createSchedule(@RequestParam Long barberId, @Valid @RequestBody ScheduleRequest request
     ) {
         return new ResponseEntity<>(scheduleService.createSchedule(barberId, request), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getScheduleById(@PathVariable Long id) {
+    public ResponseEntity<ScheduleResponse> getScheduleById(@PathVariable Long id) {
         return new ResponseEntity<>(scheduleService.getScheduleById(id), HttpStatus.OK);
     }
 
     @GetMapping("/barber/{barberId}/date")
-    public ResponseEntity getScheduleByBarberIdAndWorkDate(
+    public ResponseEntity<List<ScheduleResponse>> getScheduleByBarberIdAndWorkDate(
             @PathVariable Long barberId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         return new ResponseEntity<>(scheduleService.getScheduleByBarberIdAndWorkDate(barberId, date), HttpStatus.OK);
     }
 
     @GetMapping("/barber/{barberId}/dates")
-    public ResponseEntity getScheduleByBarberIdAndWorkDateBetween(
+    public ResponseEntity<List<ScheduleResponse>> getScheduleByBarberIdAndWorkDateBetween(
             @PathVariable Long barberId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
@@ -51,13 +51,13 @@ public class ScheduleController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateSchedule(@PathVariable Long id, @RequestBody ScheduleRequest request) {
+    public ResponseEntity<ScheduleResponse> updateSchedule(@PathVariable Long id, @Valid @RequestBody ScheduleRequest request) {
         return new ResponseEntity<>(scheduleService.updateSchedule(id, request), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteSchedule(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteSchedule(@PathVariable Long id) {
         scheduleService.deleteSchedule(id);
-        return new ResponseEntity<>(id, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

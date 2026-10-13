@@ -8,7 +8,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class User {
@@ -35,15 +34,23 @@ public class User {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    @CreatedDate
     @Column(name = "created_at", updatable = false, nullable = false)
     private LocalDateTime createdAt;
 
-    @LastModifiedDate
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
     public User() {}
+
+    @PrePersist
+    private void onCreate(){
+        this.createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    private void onUpdate(){
+        this.updatedAt = LocalDateTime.now();
+    }
 
     public Long getId() {
         return id;

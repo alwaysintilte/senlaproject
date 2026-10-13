@@ -10,7 +10,7 @@ import java.util.List;
 @PrimaryKeyJoinColumn(name = "id")
 public class Barber extends User {
     @Column(nullable = false)
-    private Double rating;
+    private Double rating =  0.0;
 
     @Column(nullable = false, length = 100)
     private String specialty;
